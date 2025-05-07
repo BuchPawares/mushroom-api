@@ -6,7 +6,7 @@ from PIL import Image
 app = Flask(__name__)
 
 # โหลดโมเดล
-model = load_model("mushroom_cnn_model")
+model = load_model("mushroom_cnn_model.h5")
 class_names = ['ระโงก', 'ระงาก'] # เปลี่ยนตามโมเดลคุณ
 
 @app.route('/predict', methods=['POST'])
