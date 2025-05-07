@@ -11,27 +11,15 @@ class_names = ['ระโงก', 'ระงาก'] # เปลี่ยนต�
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
+    file = request.files['file']
+    img = Image.open(file).convert("RGB").resize((96, 96))  # ขนาดตรงกับโมเดล
+    img_array = np.array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-    try:
-        file = request.files['file']
-        img = Image.open(file.stream).convert('RGB')
-        img = img.resize((128, 128))  # ปรับให้ตรงกับขนาด input ของโมเดล
-        img_array = np.array(img) / 255.0
-        img_array = np.expand_dims(img_array, axis=0)
+    prediction = model.predict(img_array)
+    predicted_class = class_names[np.argmax(prediction)]
 
-        prediction = model.predict(img_array)[0]
-        predicted_index = np.argmax(prediction)
-        predicted_label = class_names[predicted_index]
-        confidence = float(prediction[predicted_index])
-
-        return jsonify({
-            'label': predicted_label,
-            'confidence': round(confidence, 4)
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    return jsonify({"class": predicted_class})
 
 # สำหรับโฮสต์บน Render ต้องระบุ host และ port
 if __name__ == '__main__':
