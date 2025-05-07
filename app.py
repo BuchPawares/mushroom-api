@@ -12,7 +12,7 @@ class_names = ['ระโงก', 'ระงาก'] # เปลี่ยนต�
 @app.route('/predict', methods=['POST'])
 def predict():
     file = request.files['file']
-    img = Image.open(file).convert("RGB").resize((96, 96))  # ขนาดตรงกับโมเดล
+    img = Image.open(file).convert("RGB").resize((128, 128))  # ขนาดตรงกับโมเดล
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
 
