@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # โหลดโมเดล
 model = load_model("mushroom_cnn_model.h5")
-class_names = ['Not_dangerous', 'Danger'] # เปลี่ยนตามโมเดลคุณ
+class_names = ['ระโงก', 'ระงาก']  # เปลี่ยนตามโมเดลคุณ
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -16,8 +16,9 @@ def predict():
 
     try:
         file = request.files['file']
-        img = Image.open(file.stream).convert('RGB')
+
         img = img.resize((128, 128))  # ปรับให้ตรงกับขนาด input ของโมเดล
+        img_array = np.array(img)
         img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
