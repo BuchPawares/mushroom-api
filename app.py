@@ -16,7 +16,7 @@ def predict():
 
     try:
         file = request.files['file']
-
+        img = Image.open(file.stream)
         img = img.resize((128, 128))  # ปรับให้ตรงกับขนาด input ของโมเดล
         img_array = np.array(img)
         img_array = np.array(img) / 255.0
